@@ -5,6 +5,7 @@ import requests
 import os
 import urllib
 import lxml
+import pymysql
 
 # 爬取好豆网某一类菜的图片信息
 url = "http://www.haodou.com/recipe/album/14067884/"
@@ -84,6 +85,35 @@ def save_text(title_text, author_text, img_text):
             # writer = csv.writer(file)
             # writer.writerow(title_text[line]
 
+def save_to_mysql(title_text, author_text, img_text):
+    """
+    将爬取内如存入mysql
+    """
+    print('======连接到mysql服务器======')
+    mydb = pymysql.connect(host='localhost', user='root',
+                           passwd='123456', db='spider', port=3306, charset='utf8')
+    cursor = mydb.cursor()
+    print('======连接上了=======')
+    #创建表及字段
+    cursor.execute("DROP TABLE IF EXISTS haodou")
+    createTableSql = """CREATE TABLE haodou (
+        id int NOT NULL ,
+        title CHAR(30),
+        author CHAR(10),
+        img CHAR(100)
+         )
+        """
+    cursor.execute(createTableSql)
+    print("======表及字段创建成功=======")
+    for line in range(len(title_text)):
+        # {0} {1} 要和sql语句区分
+        cursor.execute('insert into haodou (id,title,author,img) values("{0}","{1}","{2}","{3}");'.format(
+            line, title_text[line], author_text[line], img_text[line]))
+    print("======插入数据成功=======")
+    cursor.close()  # 关游标
+    mydb.commit()
+    mydb.close()  # 关数据库
+
 
 def downLoadImgs(img_text, title_text):
     # 下载爬取的图片
@@ -118,5 +148,6 @@ if __name__ == '__main__':
     # open_browser(url)
     html = get_page(url)
     title_text, author_text, img_text = get_text(html)
-    save_text(title_text, author_text, img_text)
-    downLoadImgs(img_text, title_text)
+    # save_text(title_text, author_text, img_text)
+    save_to_mysql(title_text, author_text, img_text)
+    # downLoadImgs(img_text, title_text)
