@@ -1,9 +1,6 @@
 # encoding=utf-8
 import time
-import lxml
-import urllib
-import http.cookiejar
-import requests
+
 from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.common.action_chains import *
@@ -18,7 +15,7 @@ def open_browser(url):
     """
     使用chrome打开浏览器，并打开网页
     """
-    drvier = webdriver.Chrome(r"D:\Python\IEDriverServer\chromedriver.exe")
+    drvier = webdriver.Chrome()
     drvier.maximize_window()
     # drvier = webdriver.PhantomJS(
     #     executable_path=r"D:\Python\phantomjs-2.1.1-windows\bin\phantomjs.exe")
@@ -36,12 +33,12 @@ def login(drvier):
     drvier.find_element_by_id('password').send_keys("1234567")
     # 调用js对相中的元素标红
     js = "var q=document.getElementById(\"loginName\");q.style.border=\"1px solid red\";"
-    drvier.execute_script(js)
+    # drvier.execute_script(js)
     drvier.find_element_by_xpath("//*[@id=\"identitryCodeValue\"]").clear()
     inputValue = str(input("输入验证码："))
     print("打印验证码：" + inputValue)
     drvier.find_element_by_xpath("//*[@id=\"identitryCodeValue\"]").send_keys(inputValue)
-    print("验证码输入成功。。")
+    print("-----------验证码输入成功---------------------")
     drvier.find_element_by_xpath("//*[@id=\"dowebok\"]/div/div/div[2]/div/div[4]/a").click()
     time.sleep(3)
     title = driver.title
@@ -69,7 +66,7 @@ def getDailyReportPage(driver):
 
     # 建立动作链
     chain = ActionChains(driver)
-    # 定位元素
+    # 定位元素综合报表
     implement = driver.find_element_by_css_selector(".user_d_h301")
     print(implement.text)
     # 执行移动鼠标悬停到该元素上
@@ -133,10 +130,6 @@ def get_text(driver, html):
     monthElecGenPlanAssess = soup.select("#monthElecGenPlanAssess1")
 
     print("================FIND TR TIPS================\n\n", type(monthElecGenPlanAssess), monthElecGenPlanAssess)
-
-
-
-
 
 
 if __name__ == '__main__':
