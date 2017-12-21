@@ -106,6 +106,7 @@ def get_audio_id(album_url):
     """
     html = requests.get(album_url, headers=headers1).text
     ifanother = etree.HTML(html).xpath('//div[@class="pagingBar_wrapper"]/a[last()-1]/@data-page')
+
     if len(ifanother):
         num = ifanother[0]
         print('该专辑一共有' + num + '页！！！')
@@ -118,8 +119,11 @@ def get_audio_id(album_url):
             soup = BeautifulSoup(response, "lxml")
             soundids = soup.find("div", attrs={"class": "album_soundlist"})
             soundid = soundids.find_all("li")
+            sound_id = sound_id["sound_id"]
             for sound_id in soundid:
-                downloadJson = "http://www.ximalaya.com/tracks/{}.json".format(sound_id["sound_id"])
+                # 通过li标签的sound_id 属性获取sound_id值
+                # 也可以通过xpath获取 etree.HTML(html).xpath('//div[@class="album_soundlist"]/ul/li/@sound_id')
+                downloadJson = "http://www.ximalaya.com/tracks/{}.json".format(sound_id)
                 get_download_info(downloadJson)
     else:
         print("该专辑只有一页！！！")

@@ -16,7 +16,7 @@ SERVICE_ARGS = ['--load-images=false', '--disk-cache=true']
 driver = webdriver.PhantomJS(
     executable_path=r"D:\Python\phantomjs-2.1.1-windows\bin\phantomjs.exe", service_args=SERVICE_ARGS)
 # driver = webdriver.PhantomJS(service_args=SERVICE_ARGS)
-# driver = webdriver.Chrome(r"D:\Python\IEDriverServer\chromedriver.exe")
+# driver = webdriver.Chrome()
 
 wait = WebDriverWait(driver, 10)
 products = []

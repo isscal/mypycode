@@ -1,10 +1,11 @@
 # coding:utf-8
-import urllib
 import http.cookiejar
+import urllib
+
 import requests
 from bs4 import BeautifulSoup
 
-url="http://10.80.73.7/IISP/views/report/daily/re_asa.jsp?Id=HNDailyReportAsa20170601&dateTime=20170601&statu=0"
+url = "http://10.80.73.7/IISP/hn/views/report/daily/re_asa.jsp?Id=HNDailyReportAsa20170601&dateTime=20170601&statu=0"
 
 def Cookie():
     # 声明一个CookieJar对象来保存cookie
@@ -15,7 +16,7 @@ def Cookie():
     opener = urllib.request.build_opener(handler)
 
     # 创建请求
-    res = opener.open('http://10.80.73.7/IISP/views/login.jsp')
+    res = opener.open('http://192.168.1.139/IISP/login.jsp')
     for item in cookie:
         print('name:' + item.name + '-value:' + item.value)
 
@@ -33,7 +34,8 @@ def saveCookie():
     # 构建opener
     opener = urllib.request.build_opener(handler)
     # 创建请求
-    res = opener.open('http://10.80.73.7/IISP/views/report/daily/re_daily_quota.jsp?id=HNDailyReportQuo20170601&dateTime=20170601&secondCompanyCode=HN')
+    res = opener.open(
+        'http://10.80.73.7/IISP/hn/views/report/daily/re_daily_quota.jsp?id=HNDailyReportQuo20170601&dateTime=20170601&secondCompanyCode=HN')
     # 保存cookie到文件
     # ignore_discard的意思是即使cookies将被丢弃也将它保存下来
     # ignore_expires的意思是如果在该文件中cookies已经存在，则覆盖原文件写入
@@ -57,7 +59,7 @@ def getCookie():
     handler = urllib.request.HTTPCookieProcessor(cookie)
     opener = urllib.request.build_opener(handler)
     res = opener.open(
-        'http://10.80.73.7/IISP/views/report/daily/re_daily_quota.jsp?id=HNDailyReportQuo20170601&dateTime=20170601&secondCompanyCode=HN')
+        'http://10.80.73.7/IISP/hn/views/report/daily/re_daily_quota.jsp?id=HNDailyReportQuo20170601&dateTime=20170601&secondCompanyCode=HN')
     html = res.read().decode("utf-8")
     # print (html)
     return html
@@ -72,7 +74,7 @@ def getContent(html):
 def postData():
     headers = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36',
-         "cookie":"JSESSIONID=5B060C2D9AC18AA873EF927CDD774E02; ZDKJ_TICKET=8426C128FF4AD8FFCCE2B99F557F90B4"
+        "cookie": "JSESSIONID=CBFAC8419ECD49D5FBFBFBE918CF623F; ZDKJ_TICKET=6C5088A5CE53CE1ABF7D76E195037BDA"
     }
     playLoad = {"id": "HNDailyReportQuo20170601",
                 "dateTime": "20170601", "secondCompanyCode": "HN", "type": "1"}
@@ -81,8 +83,8 @@ def postData():
 
 
 if __name__ == '__main__':
-    # Cookie()
-    # saveCookie()
-    # html = getCookie()
-    # getContent(html)
+    Cookie()
+    saveCookie()
+    html = getCookie()
+    getContent(html)
     postData()

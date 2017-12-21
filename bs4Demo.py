@@ -1,20 +1,20 @@
 #encoding=utf-8
 from bs4 import BeautifulSoup
-import requests
-from lxml import etree
+
 # r=requests.get("https://www.baidu.com/")
 # html=r.text
-soup=BeautifulSoup(open(r"D:\myCode\htmlCode\myhtml.html",encoding='gb18030',errors='ignore'),"lxml")
+soup = BeautifulSoup(open(r"D:\myCode\htmlCode\myhtml.html", encoding='utf-8', errors='ignore'), "lxml")
+# soup=BeautifulSoup(r.text,"html.parser")
 # html=etree.parse(r"D:\myCode\htmlCode\myhtml.html")
 # html.xpath("p")
 # print(Html.prettify())
-# print(soup.head.contents[5])
+print(soup.head.contents)
 picList = soup.find("div", attrs={"class": "picList"})
 # titles = soup.find_all("p",attrs={"class":"f14 mgt5"})
 # authors = soup.find_all("p",attrs={"class":"uids"})
 imgs = soup.find_all('p',attrs={"class":"bigimg"})
 # print(type(imgs),"\n\n")
-# print(type(imgs[0]),imgs[0].img.get('src'))
+print("图片地址", type(imgs[0]), imgs[0].img.get('src'))
 # for i in imgs:
 #     print(i.img.get('src'))
 # print (r.status_code,r.text)
@@ -99,7 +99,9 @@ imgs = soup.find_all('p',attrs={"class":"bigimg"})
 #（2）通过类名查找
 # print(soup.select(".img-responsive"))
 # （3）通过 id 名查找
-# print(soup.select("#indoor-outdoor"))
+print(type(soup.find(id="label_title")), soup.find(id="label_title").get_text())
+print(type(soup.find(id="label_title")), soup.find(id="label_title").string)
+print(type(soup.select("#label_title")), soup.select("#label_title"))
 #（4）组合查找
 # 组合查找即和写 class 文件时，标签名与类名、id名进行的组合原理是一样的，例如查找 p 标签中，id 等于 link1的内容，二者需要用空格分开
 # print(soup.select(".col-xs-6 #indoor-outdoor"))
